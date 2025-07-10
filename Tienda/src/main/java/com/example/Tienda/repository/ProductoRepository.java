@@ -118,5 +118,14 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 """)
     List<Object[]> rankingCartasDeseadas();
 
+    @Query("""
+    SELECT DISTINCT p FROM Producto p
+    JOIN p.tiendas t
+    JOIN t.direccion dTienda
+    JOIN Usuario u ON u.idUsuario = :idUsuario
+    JOIN u.direcciones dUsuario
+    WHERE LOWER(dTienda.comuna) = LOWER(dUsuario.comuna)
+""")
+    List<Producto> findProductosPorComunaDelUsuario(@Param("idUsuario") Long idUsuario);
 
 }

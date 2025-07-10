@@ -301,4 +301,10 @@ public class ProductoController {
         }
     }
 
+    @GetMapping("/por-ubicacion/{idUsuario}")
+    public ResponseEntity<List<Producto>> obtenerProductosPorUbicacion(@PathVariable Long idUsuario) {
+        List<Producto> productos = productoService.obtenerProductosPorUbicacionDeUsuario(idUsuario);
+        return ResponseEntity.ok(productos);
+    }
+
 }

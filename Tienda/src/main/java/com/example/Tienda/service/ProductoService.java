@@ -416,4 +416,7 @@ public class ProductoService {
         producto.setTipoProducto(tipoProducto);
         return productoRepository.save(producto);
     }
+    public List<Producto> obtenerProductosPorUbicacionDeUsuario(Long idUsuario) {
+        return productoRepository.findProductosPorComunaDelUsuario(idUsuario);
+    }
 }

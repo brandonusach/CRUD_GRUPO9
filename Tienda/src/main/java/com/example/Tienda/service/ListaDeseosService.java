@@ -1,12 +1,14 @@
 package com.example.Tienda.service;
 
 import com.example.Tienda.entity.ListaDeseos;
+import com.example.Tienda.entity.Producto;
 import com.example.Tienda.repository.ListaDeseosRepository;
 import com.example.Tienda.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,4 +120,21 @@ public class ListaDeseosService {
     public List<ListaDeseos> obtenerListasConProductos(Long idUsuario) {
         return listaDeseosRepository.findByUsuarioIdUsuarioWithProductos(idUsuario);
     }
+
+    public ListaDeseos agregarProducto(Long idLista, Long idProducto) {
+        ListaDeseos listaDeseos = listaDeseosRepository.findById(idLista)
+                .orElseThrow(() -> new RuntimeException("Lista de deseos no encontrada"));
+
+        Producto producto = productoRepository.findById(idProducto)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        if (listaDeseos.getProductos() == null) {
+            listaDeseos.setProductos(new HashSet<>());
+        }
+
+        listaDeseos.getProductos().add(producto);
+
+        return listaDeseosRepository.save(listaDeseos);
+    }
+
 }

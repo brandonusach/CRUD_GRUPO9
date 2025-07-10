@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -60,6 +61,26 @@ public class ListaDeDeseosController {
         try {
             ListaDeseos listaActualizada = listaDeseosService.actualizarListaDeseos(id, listaDeseos);
             return new ResponseEntity<>(listaActualizada, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    //UPDATE  Agregar un producto
+    @PutMapping("/{id}/agregar-producto")
+    public ResponseEntity<ListaDeseos> agregarProductoAListaDeDeseos(
+            @PathVariable("id") Long idLista,
+            @RequestBody Map<String, Long> requestBody) {
+        try {
+            Long idProducto = requestBody.get("idProducto");
+            if (idProducto == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            ListaDeseos listaActualizada = listaDeseosService.agregarProducto(idLista, idProducto);
+            return new ResponseEntity<>(listaActualizada, HttpStatus.OK);
+
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
